@@ -1,0 +1,30 @@
+[
+    {
+        "name": "sou",
+        "usn": "2sa23cs100",
+        "branch": "cs",
+        "cgpa": 8.0,
+        "status": "Eligible"
+    },
+    {
+        "name": "sou",
+        "usn": "2sa23cs015",
+        "branch": "cs",
+        "cgpa": 8.0,
+        "status": "Eligible"
+    },
+    {
+        "name": "sou",
+        "usn": "2sa23cs100",
+        "branch": "cs",
+        "cgpa": 8.0,
+        "status": "Eligible"
+    },
+    {
+        "usn": "2sa23cs017",
+        "name": "pakku",
+        "branch": "cs",
+        "cgpa": 7.0,
+        "status": "Eligible"
+    }
+]
