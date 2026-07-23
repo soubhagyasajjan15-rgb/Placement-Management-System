@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Applications</title>
+
+    <style>
+
+        table{
+            border-collapse:collapse;
+            width:90%;
+        }
+
+        th,td{
+            border:1px solid black;
+            padding:10px;
+            text-align:center;
+        }
+
+        th{
+            background:#007BFF;
+            color:white;
+        }
+
+    </style>
+
+</head>
+<body>
+
+<h2>Placement Applications</h2>
+
+<table>
+
+<tr>
+
+<th>Application ID</th>
+<th>USN</th>
+<th>Company</th>
+<th>Job Role</th>
+<th>Location</th>
+<th>Status</th>
+<th>Action</th>
+
+</tr>
+
+{% for app in applications %}
+
+<tr>
+
+<td>{{ app[0] }}</td>
+<td>{{ app[1] }}</td>
+<td>{{ app[2] }}</td>
+<td>{{ app[3] }}</td>
+<td>{{ app[4] }}</td>
+<td>{{ app[5] }}</td>
+
+<td>
+    <a href="/edit_application/{{ app[0] }}">
+        Update Status
+    </a>
+</td>
+
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>View Companies</title>
+    <style>
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th,td{
+            border:1px solid black;
+            padding:10px;
+            text-align:center;
+        }
+
+        th{
+            background-color:lightgreen;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Company List</h1>
+
+<table>
+
+<tr>
+    <th>ID</th>
+    <th>Company Name</th>
+    <th>Job Role</th>
+    <th>Package</th>
+    <th>Minimum CGPA</th>
+    <th>Location</th>
+    <th>Edit</th>
+    <th>Delete</th>
+</tr>
+
+{% for company in companies %}
+
+<tr>
+    <td>{{ company[0] }}</td>
+    <td>{{ company[1] }}</td>
+    <td>{{ company[2] }}</td>
+    <td>{{ company[3] }}</td>
+    <td>{{ company[4] }}</td>
+    <td>{{ company[5] }}</td>
+
+    <td>
+        <a href="/edit_company/{{ company[0] }}">Edit</a>
+    </td>
+
+    <td>
+        <a href="/delete_company/{{ company[0] }}">Delete</a>
+    </td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="/dashboard">Back to Dashboard</a>
+
+</body>
+</html>

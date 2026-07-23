@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Available Drives</title>
+</head>
+<body>
+
+<h1>Available Placement Drives</h1>
+
+<table border="1" cellpadding="10">
+<tr>
+    <th>Drive ID</th>
+    <th>Role</th>
+    <th>Package</th>
+    <th>CGPA</th>
+    <th>Location</th>
+    <th>Action</th>
+    <th>Company</th>
+</tr>
+
+{% for drive in drives %}
+<tr>
+    <td>{{ drive[0] }}</td>
+    <td>{{ drive[3] }}</td>
+    <td>{{ drive[4] }} LPA</td>
+    <td>{{ drive[5] }}</td>
+    <td>{{ drive[6] }}</td>
+    <td>
+    <a href="/company/{{ drive[1] }}">View Company</a>
+    <a href="/apply/{{ drive[0] }}">Apply</a>
+    </td>
+</tr>
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="/student_dashboard">Back to Dashboard</a>
+
+</body>
+</html>

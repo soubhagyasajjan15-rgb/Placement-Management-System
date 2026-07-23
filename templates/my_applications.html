@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Applications</title>
+</head>
+<body>
+
+<h2>My Applications</h2>
+
+<table border="1" cellpadding="10">
+<tr>
+    <th>Company</th>
+    <th>Job Role</th>
+    <th>Location</th>
+    <th>Status</th>
+</tr>
+
+{% for app in applications %}
+<tr>
+    <td>{{ app.company_name }}</td>
+    <td>{{ app.job_role }}</td>
+    <td>{{ app.location }}</td>
+    <td>{{ app.status }}</td>
+</tr>
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="{{ url_for('student_dashboard') }}">
+    <button>Back to Dashboard</button>
+</a>
+
+</body>
+</html>

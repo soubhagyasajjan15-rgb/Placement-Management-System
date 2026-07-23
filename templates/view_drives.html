@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Available Placement Drives</title>
+</head>
+<body>
+
+<h2>Available Placement Drives</h2>
+
+<table border="1" cellpadding="10">
+
+<tr>
+    <th>Company</th>
+    <th>Job Role</th>
+    <th>Package (LPA)</th>
+    <th>Required CGPA</th>
+    <th>Location</th>
+    <th>Drive Date</th>
+    <th>Action</th>
+</tr>
+
+{% for drive in drives %}
+
+<tr>
+
+<td>{{ drive.company_name }}</td>
+<td>{{ drive.job_role }}</td>
+<td>{{ drive.package }}</td>
+<td>{{ drive.eligibility_cgpa }}</td>
+<td>{{ drive.location }}</td>
+<td>{{ drive.drive_date }}</td>
+
+<td>
+    <a href="{{ url_for('apply_drive', drive_id=drive.drive_id) }}">
+        <button>Apply</button>
+    </a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<br>
+
+<a href="{{ url_for('student_dashboard') }}">
+    <button>Back to Dashboard</button>
+</a>
+
+</body>
+</html>

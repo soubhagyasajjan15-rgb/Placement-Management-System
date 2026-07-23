@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Applications</title>
+</head>
+<body>
+
+<h2>Student Applications</h2>
+
+<table border="1">
+
+<tr>
+<th>USN</th>
+<th>Name</th>
+<th>Company</th>
+<th>Role</th>
+<th>Status</th>
+<th>Resume</th>
+<th>Action</th>
+</tr>
+
+{% for a in applications %}
+
+<tr>
+
+<td>{{a.usn}}</td>
+<td>{{a.name}}</td>
+<td>{{a.company_name}}</td>
+<td>{{a.job_role}}</td>
+<td>{{a.status}}</td>
+
+<td>
+{% if a.resume %}
+<a href="/uploads/{{a.resume}}" target="_blank">View Resume</a>
+{% else %}
+No Resume
+{% endif %}
+</td>
+
+<td>
+<a href="/update_status/{{a.application_id}}">
+Update
+</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Application Status</title>
+</head>
+<body>
+
+<h2>Update Application Status</h2>
+
+<p><strong>Application ID:</strong> {{ application[0] }}</p>
+<p><strong>USN:</strong> {{ application[1] }}</p>
+
+<form method="POST">
+
+    <label>Status:</label><br><br>
+
+    <select name="status">
+
+        <option value="Applied">Applied</option>
+        <option value="Shortlisted">Shortlisted</option>
+        <option value="Selected">Selected</option>
+        <option value="Rejected">Rejected</option>
+
+    </select>
+
+    <br><br>
+
+    <button type="submit">
+        Update Status
+    </button>
+
+</form>
+
+</body>
+</html>

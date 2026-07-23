@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Update Status</title>
+</head>
+<body>
+
+<h2>Update Application Status</h2>
+
+<form method="POST">
+
+<p><b>Application ID:</b> {{ application[0] }}</p>
+
+<p><b>USN:</b> {{ application[1] }}</p>
+
+<p><b>Drive ID:</b> {{ application[2] }}</p>
+
+<label>Status</label>
+
+<select name="status">
+    <option value="Applied">Applied</option>
+    <option value="Selected">Selected</option>
+    <option value="Rejected">Rejected</option>
+</select>
+
+<br><br>
+
+<button type="submit">Update</button>
+
+</form>
+
+</body>
+</html>
