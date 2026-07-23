@@ -35,3 +35,16 @@ The Placement Management System is a Python-based application that helps manage 
 
 ## Author
 Soubhagya Sajjan
+## Screenshots
+
+### Login Page
+![Login](screenshots/login.png)
+
+### Admin Dashboard
+![Dashboard](screenshots/admin_dashboard.png)
+
+### Reports
+![Reports](screenshots/reports.png)
+
+### Student Profile
+![Profile](screenshots/student_profile.png)
