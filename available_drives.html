@@ -1,0 +1,39 @@
+<table border="1">
+
+<tr>
+    <th>Drive ID</th>
+    <th>Role</th>
+    <th>Package</th>
+    <th>CGPA</th>
+    <th>Location</th>
+    <th>Action</th>
+    <th>Company</th>
+</tr>
+
+{% for drive in drives %}
+
+<tr>
+
+    <td>{{ drive[0] }}</td>
+    <td>{{ drive[1] }}</td>
+    <td>{{ drive[2] }}</td>
+    <td>{{ drive[3] }}</td>
+    <td>{{ drive[4] }}</td>
+
+  <td>
+    <a href="/company/{{ drive[6] }}">
+        <button type="button">View Company</button>
+    </a>
+
+    <a href="{{ url_for('apply_drive', drive_id=drive[0]) }}">
+        <button type="button">Apply</button>
+    </a>
+</td>
+
+    <td>{{ drive[5] }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>

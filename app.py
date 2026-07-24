@@ -107,9 +107,9 @@ def view_students():
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT usn, name, department, cgpa, email, phone
-        FROM students
-    """)
+    SELECT usn, name, department, cgpa, email, phone, resume
+    FROM students
+""")
 
     students = cursor.fetchall()
 
@@ -120,6 +120,30 @@ def view_students():
         "view_students.html",
         students=students
     )
+
+from flask import send_from_directory
+
+@app.route("/view_resume/<usn>")
+def view_resume(usn):
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute(
+        "SELECT resume FROM students WHERE usn=%s",
+        (usn,)
+    )
+
+    result = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if result is None or result[0] is None:
+        return "Resume not found."
+
+    return send_from_directory("uploads", result[0])
+
 @app.route("/edit_student/<usn>", methods=["GET", "POST"])
 def edit_student(usn):
 
@@ -206,7 +230,7 @@ def search_student():
         cursor.close()
         conn.close()
 
-    return render_template("search_student.html", students=students)
+    return render_template("search_students.html", students=students)
 
 # ---------------- Company ----------------
 
@@ -255,20 +279,19 @@ def companies():
 def view_companies():
 
     conn = get_connection()
-
-    if conn is None:
-        return "Database Connection Failed"
-
     cursor = conn.cursor()
 
     cursor.execute("""
-        SELECT company_id,
-               company_name,
-               job_role,
-               package,
-               eligibility_cgpa,
-               location
-        FROM companies
+        SELECT 
+            c.company_id,
+            c.company_name,
+            d.job_role,
+            d.package,
+            d.eligibility_cgpa,
+            d.location
+        FROM companies c
+        JOIN drives d
+        ON c.company_id = d.company_id
     """)
 
     companies = cursor.fetchall()
@@ -280,6 +303,62 @@ def view_companies():
         "view_companies.html",
         companies=companies
     )
+
+@app.route("/view_company/<int:company_id>")
+def view_company(company_id):
+
+    conn = get_connection()
+
+    if conn is None:
+        return "Database Connection Failed"
+
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT company_id, company_name
+        FROM companies
+        WHERE company_id=%s
+    """, (company_id,))
+
+    company = cursor.fetchone()
+
+    cursor.close()
+    conn.close()
+
+    if company is None:
+        return "Company not found"
+
+    return render_template(
+        "company_details.html",
+        company=company
+    )
+       
+@app.route("/placement_drives")
+def placement_drives():
+
+    conn = get_connection()
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+        SELECT
+            d.drive_id,
+            c.company_name,
+            d.job_role,
+            d.package,
+            d.eligibility_cgpa,
+            d.location,
+            d.drive_date
+        FROM drives d
+        JOIN companies c
+            ON d.company_id = c.company_id
+    """)
+
+    drives = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template("placement_drives.html", drives=drives)
 @app.route("/edit_company/<int:company_id>", methods=["GET", "POST"])
 def edit_company(company_id):
 
@@ -408,22 +487,49 @@ def view_drives():
 
     if conn is None:
         return "Database Connection Failed"
+    cursor = conn.cursor(dictionary=True)
+
+    cursor.execute("""
+    SELECT 
+        d.drive_id,
+        d.job_role,
+        d.package,
+        d.cgpa,
+        d.location,
+        c.company_name
+    FROM drives d
+    JOIN companies c
+    ON d.company_id = c.company_id
+""")
+
+    drives = cursor.fetchall()
+    drives = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template("view_drives.html", drives=drives)
+
+@app.route("/available_drives")
+def available_drives():
+
+    conn = get_connection()
 
     cursor = conn.cursor(dictionary=True)
 
     cursor.execute("""
         SELECT
             d.drive_id,
-            c.company_name,
+            d.company_id,
             d.job_role,
             d.package,
             d.eligibility_cgpa,
             d.location,
-            d.drive_date
+            d.drive_date,
+            c.company_name
         FROM drives d
         JOIN companies c
         ON d.company_id = c.company_id
-        ORDER BY d.drive_date
     """)
 
     drives = cursor.fetchall()
@@ -431,7 +537,12 @@ def view_drives():
     cursor.close()
     conn.close()
 
-    return render_template("view_drives.html", drives=drives)
+    return render_template(
+        "available_drives.html",
+        drives=drives
+    )
+
+
 @app.route("/view_applications")
 def view_applications():
 
@@ -755,12 +866,17 @@ def student_login():
         cursor = conn.cursor()
 
         cursor.execute("""
-            SELECT usn, name, department, cgpa
-            FROM students
-            WHERE usn = %s AND password = %s
-        """, (usn, password))
+    SELECT usn, name, department, cgpa
+    FROM students
+    WHERE UPPER(usn) = UPPER(%s) 
+    AND password = %s
+""", (usn, password))
 
         student = cursor.fetchone()
+
+        print("USN entered:", usn)
+        print("Password entered:", password)
+        print("Student found:", student)
 
         cursor.close()
         conn.close()
@@ -792,6 +908,41 @@ def student_dashboard():
         name=session["student_name"]
     )
 
+@app.route("/my_applications")
+def my_applications():
+
+    usn = session.get("student_usn")
+
+    if not usn:
+        return redirect(url_for("student_login"))
+
+    conn = get_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT 
+            c.company_name,
+            d.job_role,
+            d.location,
+            a.status
+        FROM applications a
+        JOIN drives d
+        ON a.drive_id = d.drive_id
+        JOIN companies c
+        ON d.company_id = c.company_id
+        WHERE a.usn = %s
+    """, (usn,))
+
+    applications = cursor.fetchall()
+
+    cursor.close()
+    conn.close()
+
+    return render_template(
+        "my_applications.html",
+        applications=applications
+    )
+
 # ---------------- Student Logout ----------------
 @app.route("/student_logout")
 def student_logout():
@@ -821,16 +972,19 @@ def student_drives():
 
     # Show only eligible drives
     cursor.execute("""
-        SELECT drive_id,
-               company_id,
-               drive_date,
-               job_role,
-               package,
-               eligibility_cgpa,
-               location
-        FROM drives
-        WHERE eligibility_cgpa <= %s
-    """, (cgpa,))
+    SELECT 
+        d.drive_id,
+        c.company_name,
+        d.job_role,
+        d.package,
+        d.eligibility_cgpa,
+        d.location,
+        d.company_id
+    FROM drives d
+    JOIN companies c
+    ON d.company_id = c.company_id
+    WHERE d.eligibility_cgpa <= %s
+""", (cgpa,))
 
     drives = cursor.fetchall()
 

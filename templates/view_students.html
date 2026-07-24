@@ -4,7 +4,6 @@
     <title>View Students</title>
 
     <style>
-
         table{
             width:100%;
             border-collapse:collapse;
@@ -25,9 +24,7 @@
             color:red;
             font-weight:bold;
         }
-
     </style>
-
 </head>
 
 <body>
@@ -36,49 +33,59 @@
 
 <table>
 
+{% for drive in drives %}
 <tr>
-<th>Edit</th>
-<th>Delete</th>
-<th>Resume</th>
+
+<td>{{ drive[0] }}</td>
+
+<td>{{ drive[1] }}</td>
+
+<td>{{ drive[2] }}</td>
+
+<td>{{ drive[3] }} LPA</td>
+
+<td>{{ drive[4] }}</td>
+
+<td>{{ drive[5] }}</td>
+
+<td>
+    <a href="/company/{{ drive[6] }}">View Company</a>
+    <a href="/apply/{{ drive[0] }}">Apply</a>
+</td>
 
 </tr>
-
+{% endfor %}
 {% for student in students %}
 
 <tr>
 
-<td>{{ student[0] }}</td>
-<td>{{ student[1] }}</td>
-<td>{{ student[2] }}</td>
-<td>{{ student[3] }}</td>
-<td>{{ student[4] }}</td>
-<td>{{ student[5] }}</td>
+    <td>{{ student[0] }}</td>
+    <td>{{ student[1] }}</td>
+    <td>{{ student[2] }}</td>
+    <td>{{ student[3] }}</td>
+    <td>{{ student[4] }}</td>
+    <td>{{ student[5] }}</td>
 
-<td>
-<a href="/edit_student/{{ student[0] }}">Edit</a>
-</td>
+    <td>
+        <a href="/edit_student/{{ student[0] }}">Edit</a>
+    </td>
 
-<td>
-<a href="/delete_student/{{ student[0] }}">Delete</a>
-</td>
+    <td>
+        <a href="/delete_student/{{ student[0] }}">Delete</a>
+    </td>
 
-<td>
-{% if student[6] %}
-    <a href="/uploads/{{ student[6] }}" target="_blank">View Resume</a>
-{% else %}
-    Not Uploaded
-{% endif %}
-</td>
+    <td>
+        {% if student[6] %}
+            <a href="{{ url_for('view_resume', usn=student[0]) }}" target="_blank">
+                View Resume
+            </a>
+        {% else %}
+            Not Uploaded
+        {% endif %}
+    </td>
 
 </tr>
 
 {% endfor %}
 
 </table>
-
-<br>
-
-<a href="/dashboard">Back to Dashboard</a>
-
-</body>
-</html>

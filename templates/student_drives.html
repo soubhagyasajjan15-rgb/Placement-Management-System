@@ -20,15 +20,17 @@
 
 {% for drive in drives %}
 <tr>
-    <td>{{ drive[0] }}</td>
-    <td>{{ drive[3] }}</td>
-    <td>{{ drive[4] }} LPA</td>
-    <td>{{ drive[5] }}</td>
-    <td>{{ drive[6] }}</td>
+   <td>{{ drive[0] }}</td>   <!-- Drive ID -->
+    <td>{{ drive[2] }}</td>   <!-- Role -->
+    <td>{{ drive[3] }}</td>   <!-- Package -->
+    <td>{{ drive[5] }}</td>   <!-- CGPA (change if needed) -->
+    <td>{{ drive[4] }}</td>   <!-- Location -->
+
     <td>
-    <a href="/company/{{ drive[1] }}">View Company</a>
-    <a href="/apply/{{ drive[0] }}">Apply</a>
+        <a href="/view_company/{{ drive[4] }}">View Company</a>
     </td>
+
+    <td>{{ drive[1] }}</td>
 </tr>
 {% endfor %}
 
